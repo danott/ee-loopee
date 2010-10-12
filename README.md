@@ -100,8 +100,10 @@ Copy the <code>loopee/pi.loopee.php</code> file to your <code>system/plugins</co
 
 Copy the <code>loopee</code> directory to your <code>system/expressionengine/third_party</code> directory.
 
-## Legal Jargon That My Lawyer Friend's Heart Would Melt Over
+## Legal Jargon
 
 You're downloading software developed by an individual that is freely available on GitHub. You assume all responsibility for how you use it, and your mileage during use. (Developers love car analogies, right?)
 
 I tried to code defensively and test for user input errors, but I am not responsible if you cause an infinite loop that crashes your server. Feel free to fork this and improve it.
+
+Loopee is Dual licensed under the MIT or GPL Version 2 licenses, because that's what jQuery does and it's too late on a Monday night to look into what licensing I want to do for a freely distributed EE plugin. So that'll do for now.
