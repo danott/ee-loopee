@@ -3,7 +3,7 @@
 
 ## Foreach loop
 
-This Loopee ExpressionEngine Plugin allows you to loop over custom parameters using tag pairs. It is useful in scenarios where you want to loop over values that aren't in channels.
+The Loopee ExpressionEngine Plugin allows you to loop over custom parameters using tag pairs. It is useful in scenarios where you want to loop over values that aren't in channels.
 
     {exp:loopee foreach="red|green|blue"}
       My Color is {loopee_value}
@@ -35,7 +35,7 @@ This would produce the following.
 <code>{loopee_key}</code> is the pre-colon key.
 <code>{loopee_value}</code> is post-colon value.
 
-# Forint Loop
+## Forint Loop
 
 Loopee also provides functionality for looping through integer values.
 
@@ -53,7 +53,9 @@ This would produce the more appealing
 
     5,10,15,20,25
 
-BONUS: You can use custom tags with both a forint loop or a foreach loop using the <code>as</code> parameter. Modifying the loops from previous examples.
+## Custom Tags
+
+You can use custom tags with both a forint loop or a foreach loop using the <code>as</code> parameter. Modifying the loops from previous examples.
 
     {exp:loopee foreach="red|green|blue" as="color"}
       My Color is {color}
@@ -71,20 +73,35 @@ Or with a forint loop.
 
 And that is the Loopee plugin.
 
-### Compatibility
+## Inward Parsing
+
+You can also put standard EE Module tags within the loop using the <code>parse="inward"</code> parameter.
+
+So, for example, you could list all your channels.
+
+    {exp:loopee parse="inward" foreach="blog|podcast|link-list" as="channel_id"}
+    {exp:channel:info channel="{channel_id}"}
+      <h2><a href="{channel_url}">{channel_title}</a></h2>
+      <p>{channel_description}</p>
+    {/exp:channel:info}
+    {/exp:loopee}
+
+## Compatibility
 
 Loopee is built to be compatible with both EE 1 and EE 2, but so far has only been tested in the wild with EE 1. (Testers welcome.)
 
-### Installation
+## Installation
 
 **For EE 1.x**
-- Copy the <code>loopee/pi.loopee.php</code> file to your <code>system/plugins</code> directory.
+
+Copy the <code>loopee/pi.loopee.php</code> file to your <code>system/plugins</code> directory.
 
 **For EE 2.x**
-- Copy the <code>loopee</code> directory to your <code>system/expressionengine/third_party</code> directory.
 
-### Legal Jargon That My Lawyer Friend's Heart Would Melt Over
+Copy the <code>loopee</code> directory to your <code>system/expressionengine/third_party</code> directory.
+
+## Legal Jargon That My Lawyer Friend's Heart Would Melt Over
 
 You're downloading software developed by an individual that is freely available on GitHub. You assume all responsibility for how you use it, and your mileage during use. (Developers love car analogies, right?)
 
-I tried to code defensively and test for user input errors, but I am not responsible if an infinite loops that crash your server. Feel free to fork this and improve it.
+I tried to code defensively and test for user input errors, but I am not responsible if you cause an infinite loop that crashes your server. Feel free to fork this and improve it.
