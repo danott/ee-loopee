@@ -18,7 +18,7 @@ $plugin_info = array(
   'pi_author'       =>  'Daniel Ott',
   'pi_author_url'   =>  'http://danott.us/',
   'pi_description'  =>  'Loop over a set of values, key:value pairs or integers',
-  'pi_usage'        =>  Loopee::usage()
+  'pi_usage'        =>  'http://github.com/danott/danott-ee-loopee'
 );
 
 
@@ -206,7 +206,7 @@ class Loopee {
       
         
 
-    /*
+    /* FOREACH
      * Do the foreach bit for every single value that was piped.
      */
     foreach ($this->params['foreach'] as $key => $value)
@@ -215,7 +215,9 @@ class Loopee {
       $this->return_data .= preg_replace(array($key_regex,$value_regex), array($key,$value), $tagdata);
     }
 
-    /*
+
+
+    /* FORINT
      * Do the forint bit using forint, to, by, as
      */
 
@@ -225,7 +227,7 @@ class Loopee {
       $this->params[$key] = intval($this->params[$key]);
     }
 
-    // Used in many pieces of logic below. Is this a positive iteration? (TRUE or FALSE)
+    // Used in server pieces of logic below. Is this a positive iteration? (TRUE or FALSE)
     $positive_iteration = ($this->params['by'] > 0) ? TRUE : FALSE;
 
     /* Prevent infinite loops so plugin users don't accidentally kill their server.
@@ -254,144 +256,11 @@ class Loopee {
       }
     }
 
-    // Provide the nice functionality of many looping built-in ee functions. backspace="2"
+    /* Provide the nice backspace parameter functionality of many looping built-in ee functions.
+     * No matter which loop was in effect, though it will mostly only be used in forint */
     $this->return_data = substr($this->return_data, 0, strlen($this->return_data) - $this->params['backspace']);
     
   } // end of Constructor function Loopee();
-
-  /**
-   * usage()
-   * Information for the plugin within the EE Control Panel
-   * @TODO - Create this
-   */
-  function usage()
-  {
-    ob_start();
-?>
-<h1>Loopee ExpressionEngine Plugin</h1>
-
-<h2>Foreach loop</h2>
-
-<p>The Loopee ExpressionEngine Plugin allows you to loop over custom parameters using tag pairs. It is useful in scenarios where you want to loop over values that aren't in channels.</p>
-
-<pre><code>{exp:loopee foreach="red|green|blue"}
-  My Color is {loopee_value}
-{/exp:loopee}
-</code></pre>
-
-<p>This would produce:</p>
-
-<pre><code>My Color is red
-My Color is green
-My Color is blue
-</code></pre>
-
-<p>The <code>foreach</code> parameter lets you specify your values, separated by the <code>|</code> (pipe) character. If you need a pipe character in your value, you can escape it with <code>\|</code> (backslash)(pipe).</p>
-
-<p><code>{loopee_key}</code> can be used to get the 0-offset index of your parameter. (Like in a PHP array.)
-<code>{loopee_value}</code> is the value.</p>
-
-<p>You can also pass values as colon-separated key:value pairs.</p>
-
-<pre><code>{exp:loopee vars="red:ff0000|green:00ff00|blue:0000ff"}
-  Color: {loopee_key}, RGB: {loopee_value}
-{/exp:loopee}
-</code></pre>
-
-<p>This would produce the following.</p>
-
-<pre><code>Color: red, RGB: ff0000
-Color: green, RGB: 00ff00
-Color: blue, RGB: 0000ff
-</code></pre>
-
-<p><code>{loopee_key}</code> is the pre-colon key.
-<code>{loopee_value}</code> is post-colon value.</p>
-
-<h2>Forint Loop</h2>
-
-<p>Loopee also provides functionality for looping through integer values.</p>
-
-<pre><code>{exp:loopee forint="5" to="25" by="5"}{loopee_value},{/exp:loopee}
-</code></pre>
-
-<p>This would produce the following.</p>
-
-<pre><code>5,10,15,20,25,
-</code></pre>
-
-<p>That trailing comma is annoying. Like many built-in ExpressionEngine tags, the <code>backspace</code> parameter is available.</p>
-
-<pre><code>{exp:loopee forint="5" to="25" by="5" backspace="1"}{loopee_value},{/exp:loopee}
-</code></pre>
-
-<p>This would produce the more appealing</p>
-
-<pre><code>5,10,15,20,25
-</code></pre>
-
-<h2>Custom Tags</h2>
-
-<p>You can use custom tags with both a forint loop or a foreach loop using the <code>as</code> parameter. Modifying the loops from previous examples.</p>
-
-<pre><code>{exp:loopee foreach="red|green|blue" as="color"}
-  My Color is {color}
-{/exp:loopee}
-</code></pre>
-
-<p>And similarly, with key:value pairs.</p>
-
-<pre><code>{exp:loopee vars="red:ff0000|green:00ff00|blue:0000ff" as="color:rgb"}
-  Color: {color}, RGB: {rgb}
-{/exp:loopee}
-</code></pre>
-
-<p>Or with a forint loop.</p>
-
-<pre><code>{exp:loopee forint="5" to="25" by="5" as="integer" backspace="1"}{integer},{/exp:loopee}
-</code></pre>
-
-<p>And that is the Loopee plugin.</p>
-
-<h2>Inward Parsing</h2>
-
-<p>You can also put standard EE Module tags within the loop using the <code>parse="inward"</code> parameter.</p>
-
-<p>So, for example, you could list all your channels.</p>
-
-<pre><code>{exp:loopee parse="inward" foreach="blog|podcast|link-list" as="channel_id"}
-{exp:channel:info channel="{channel_id}"}
-  &lt;h2&gt;&lt;a href="{channel_url}"&gt;{channel_title}&lt;/a&gt;&lt;/h2&gt;
-  &lt;p&gt;{channel_description}&lt;/p&gt;
-{/exp:channel:info}
-{/exp:loopee}
-</code></pre>
-
-<h2>Compatibility</h2>
-
-<p>Loopee is built to be compatible with both EE 1 and EE 2, but so far has only been tested in the wild with EE 1. (Testers welcome.)</p>
-
-<h2>Installation</h2>
-
-<p><strong>For EE 1.x</strong></p>
-
-<p>Copy the <code>loopee/pi.loopee.php</code> file to your <code>system/plugins</code> directory.</p>
-
-<p><strong>For EE 2.x</strong></p>
-
-<p>Copy the <code>loopee</code> directory to your <code>system/expressionengine/third_party</code> directory.</p>
-
-<h2>Legal Jargon That My Lawyer Friend's Heart Would Melt Over</h2>
-
-<p>You're downloading software developed by an individual that is freely available on GitHub. You assume all responsibility for how you use it, and your mileage during use. (Developers love car analogies, right?)</p>
-
-<p>I tried to code defensively and test for user input errors, but I am not responsible if you cause an infinite loop that crashes your server. Feel free to fork this and improve it.</p>
-<?php
-    $buffer = ob_get_contents();
-    ob_end_clean();
-    return $buffer;
-  
-  } // end of function usage()
 
 } // end of Loopee class
 

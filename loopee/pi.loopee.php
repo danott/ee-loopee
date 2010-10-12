@@ -61,7 +61,7 @@ class Loopee {
   /**
    * Loopee() Constructor
    *
-   * Execute the function of this plugin, which is iterating over the vars parameter.
+   * Execute the function of this plugin, which is iterating the foreach or forint parameters.
    */
   function Loopee()
   {
@@ -178,7 +178,7 @@ class Loopee {
 
 
 
-    /*
+    /* TAG SETUP
      * Setup the custom defined "as" tags that are going to be replaced by either of the two loopee loops.
      */
     
@@ -206,7 +206,7 @@ class Loopee {
       
         
 
-    /*
+    /* FOREACH
      * Do the foreach bit for every single value that was piped.
      */
     foreach ($this->params['foreach'] as $key => $value)
@@ -215,7 +215,9 @@ class Loopee {
       $this->return_data .= preg_replace(array($key_regex,$value_regex), array($key,$value), $tagdata);
     }
 
-    /*
+
+
+    /* FORINT
      * Do the forint bit using forint, to, by, as
      */
 
@@ -225,7 +227,7 @@ class Loopee {
       $this->params[$key] = intval($this->params[$key]);
     }
 
-    // Used in many pieces of logic below. Is this a positive iteration? (TRUE or FALSE)
+    // Used in server pieces of logic below. Is this a positive iteration? (TRUE or FALSE)
     $positive_iteration = ($this->params['by'] > 0) ? TRUE : FALSE;
 
     /* Prevent infinite loops so plugin users don't accidentally kill their server.
@@ -254,7 +256,8 @@ class Loopee {
       }
     }
 
-    // Provide the nice functionality of many looping built-in ee functions. backspace="2"
+    /* Provide the nice backspace parameter functionality of many looping built-in ee functions.
+     * No matter which loop was in effect, though it will mostly only be used in forint */
     $this->return_data = substr($this->return_data, 0, strlen($this->return_data) - $this->params['backspace']);
     
   } // end of Constructor function Loopee();
