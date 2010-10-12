@@ -1,3 +1,8 @@
+# Loopee ExpressionEngine Plugin
+
+
+## Foreach loop
+
 This Loopee ExpressionEngine Plugin allows you to loop over custom parameters using tag pairs. It is useful in scenarios where you want to loop over values that aren't in channels.
 
     {exp:loopee foreach="red|green|blue"}
@@ -10,7 +15,7 @@ This would produce:
     My Color is green
     My Color is blue
 
-The <code>foreach</code> parameter lets you specify your values, separated by the | (pipe) character. If you need a pipe character in your value, you can escape it with \| (backslash)(pipe).
+The <code>foreach</code> parameter lets you specify your values, separated by the <code>|</code> (pipe) character. If you need a pipe character in your value, you can escape it with <code>\|</code> (backslash)(pipe).
 
 <code>{loopee_key}</code> can be used to get the 0-offset index of your parameter. (Like in a PHP array.)
 <code>{loopee_value}</code> is the value.
@@ -29,6 +34,8 @@ This would produce the following.
 
 <code>{loopee_key}</code> is the pre-colon key.
 <code>{loopee_value}</code> is post-colon value.
+
+# Forint Loop
 
 Loopee also provides functionality for looping through integer values.
 
