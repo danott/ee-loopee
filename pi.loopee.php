@@ -61,7 +61,7 @@ class Loopee {
   /**
    * Loopee() Constructor
    *
-   * Execute the function of this plugin, which is iterating over the vars parameter.
+   * Execute the function of this plugin, which is iterating the foreach or forint parameters.
    */
   function Loopee()
   {
@@ -178,7 +178,7 @@ class Loopee {
 
 
 
-    /*
+    /* TAG SETUP
      * Setup the custom defined "as" tags that are going to be replaced by either of the two loopee loops.
      */
     

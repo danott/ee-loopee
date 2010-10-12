@@ -22,7 +22,7 @@ The <code>foreach</code> parameter lets you specify your values, separated by th
 
 You can also pass values as colon-separated key:value pairs.
 
-    {exp:loopee vars="red:ff0000|green:00ff00|blue:0000ff"}
+    {exp:loopee foreach="red:ff0000|green:00ff00|blue:0000ff"}
       Color: {loopee_key}, RGB: {loopee_value}
     {/exp:loopee}
 
@@ -63,7 +63,7 @@ You can use custom tags with both a forint loop or a foreach loop using the <cod
 
 And similarly, with key:value pairs.
 
-    {exp:loopee vars="red:ff0000|green:00ff00|blue:0000ff" as="color:rgb"}
+    {exp:loopee foreach="red:ff0000|green:00ff00|blue:0000ff" as="color:rgb"}
       Color: {color}, RGB: {rgb}
     {/exp:loopee}
 
