@@ -45,13 +45,13 @@ This would produce the following.
 
     5,10,15,20,25,
 
-That trailing comma is annoying. Like many built-in ExpressionEngine tags, the <code>backspace</code> parameter is available.
+That trailing comma is annoying. Like many built-in ExpressionEngine tags, the <code>backspace</code> parameter is available. Also Loopee is smart enough to iterate negatively over integers.
 
-    {exp:loopee forint="5" to="25" by="5" backspace="1"}{loopee_value},{/exp:loopee}
+    {exp:loopee forint="5" to="-25" by="-5" backspace="1"}{loopee_value},{/exp:loopee}
 
 This would produce the more appealing
 
-    5,10,15,20,25
+    5,0,-5,-10,-15,-20,-25
 
 ## Custom Tags
 
