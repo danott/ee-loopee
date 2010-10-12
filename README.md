@@ -70,3 +70,21 @@ Or with a forint loop.
     {exp:loopee forint="5" to="25" by="5" as="integer" backspace="1"}{integer},{/exp:loopee}
 
 And that is the Loopee plugin.
+
+### Compatibility
+
+Loopee is built to be compatible with both EE 1 and EE 2, but so far has only been tested in the wild with EE 1. (Testers welcome.)
+
+### Installation
+
+**For EE 1.x**
+- Copy the <code>loopee/pi.loopee.php</code> file to your <code>system/plugins</code> directory.
+
+**For EE 2.x**
+- Copy the <code>loopee</code> directory to your <code>system/expressionengine/third_party</code> directory.
+
+### Legal Jargon That My Lawyer Friend's Heart Would Melt Over
+
+You're downloading software developed by an individual that is freely available on GitHub. You assume all responsibility for how you use it, and your mileage during use. (Developers love car analogies, right?)
+
+I tried to code defensively and test for user input errors, but I am not responsible if an infinite loops that crash your server. Feel free to fork this and improve it.
