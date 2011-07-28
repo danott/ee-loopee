@@ -73,6 +73,28 @@ Or with a forint loop.
 
 And that is the Loopee plugin.
 
+## An iterator within an iterator.
+
+<code>{loopee_count}</code> is the count of the loop.
+
+Extending on a previous example, we could produce
+
+    {exp:loopee foreach="red|green|blue"}
+      {loopee_count} My Color is {loopee_value}
+    {/exp:loopee}
+    
+Would produce
+
+    1 My Color is red
+    2 My Color is green
+    3 My Color is blue
+
+And of course, it can be customized via parameter as well.
+
+    {exp:loopee foreach="red|green|blue" as="color" count="count"}
+      {count} My Color is {color}
+    {/exp:loopee}
+
 ## Inward Parsing
 
 You can also put standard EE Module tags within the loop using the <code>parse="inward"</code> parameter.

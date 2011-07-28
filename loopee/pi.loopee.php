@@ -54,6 +54,7 @@ class Loopee {
     'to'        => 0,
     'by'        => 1,
     'as'        => array('loopee_key' => 'loopee_value'),
+    'count'     => 'loopee_count',
     'backspace' => 0
   );
   
@@ -123,7 +124,7 @@ class Loopee {
       {
         // This lookbehind regex allows for escaping the pipe character \| in passed values
         $parts = preg_split("/(?<!\\\)\|/", $param_array_value, false, PREG_SPLIT_NO_EMPTY);
-
+        
         foreach ($parts as $parts_index => &$part )
         {
           // Unescape pipe characters in all the parts
@@ -159,7 +160,10 @@ class Loopee {
        * This if-statement does exactly that. */
       if (count($param_array_value) == 1 && array_key_exists(0, $param_array_value))
       {
-        $param_array_value = $param_array_value[0];
+        if ($param_array_key != 'foreach') // The one paramter we would like to keep as-is
+        {
+          $param_array_value = $param_array_value[0];          
+        }
       }
             
       /* If we get to this point, and nothing has been set,
@@ -185,6 +189,7 @@ class Loopee {
     // Assume the defaults, even if they do get reset, it's nice to be careful.
     $key_regex = '/{loopee_key}/';
     $value_regex = '/{loopee_value}/';
+    $count_regex = '/{loopee_count}/';
     
     /* If this is an array, the "as" parameter was a key:value pair.
      * Want to make sure we can replace both the key and the value appropriately */
@@ -203,16 +208,19 @@ class Loopee {
     {
       $value_regex = '/{('.$this->params['as'].')}/';      
     }
-      
-        
+    
+    $count_regex = '/{('.$this->params['count'].')}/';
+    
 
     /* FOREACH
      * Do the foreach bit for every single value that was piped.
      */
+    $loopee_count = 1;
     foreach ($this->params['foreach'] as $key => $value)
     {
       // Replace all the {keys} and {values} in one fancy preg_replace.
-      $this->return_data .= preg_replace(array($key_regex,$value_regex), array($key,$value), $tagdata);
+      $this->return_data .= preg_replace(array($key_regex,$value_regex,$count_regex), array($key,$value,$loopee_count), $tagdata);
+      $loopee_count++;
     }
 
 
@@ -250,9 +258,9 @@ class Loopee {
        * OR
        * The iterator is >= the 'to' value when moving in the negative direction
        */
-      for ($iterator = $this->params['forint']; ($iterator <= $this->params['to'] && $positive_iteration) || ($iterator >= $this->params['to'] && ! $positive_iteration); $iterator += $this->params['by'])
+      for ($iterator = $this->params['forint'], $loopee_count = 1; ($iterator <= $this->params['to'] && $positive_iteration) || ($iterator >= $this->params['to'] && ! $positive_iteration); $iterator += $this->params['by'], $loopee_count++)
       {
-        $this->return_data .= preg_replace($value_regex, $iterator, $tagdata);
+        $this->return_data .= preg_replace(array($value_regex, $count_regex), array($iterator, $loopee_count), $tagdata);
       }
     }
 
