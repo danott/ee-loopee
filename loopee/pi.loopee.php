@@ -216,7 +216,7 @@ class Loopee {
      * Do the foreach bit for every single value that was piped.
      */
     $loopee_count = 1;
-    foreach ($this->params['foreach'] as $key => $value)
+    foreach ((array)$this->params['foreach'] as $key => $value)
     {
       // Replace all the {keys} and {values} in one fancy preg_replace.
       $this->return_data .= preg_replace(array($key_regex,$value_regex,$count_regex), array($key,$value,$loopee_count), $tagdata);
