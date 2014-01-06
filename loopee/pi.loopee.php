@@ -33,7 +33,7 @@ $plugin_info = array(
  */
 class Loopee {
 
-  /* 
+  /*
    * Initialize variables for EE1 and EE2 use in a single plugin.
    * They're later referenced in the constructor based on app version number
    */
@@ -57,8 +57,8 @@ class Loopee {
     'count'     => 'loopee_count',
     'backspace' => 0
   );
-  
-  
+
+
   /**
    * Loopee() Constructor
    *
@@ -66,7 +66,7 @@ class Loopee {
    */
   function Loopee()
   {
-    
+
     /* EE1 & EE2 Compatability! Booyah! */
     if (version_compare(APP_VER, '2', '<'))
     {
@@ -79,18 +79,18 @@ class Loopee {
       $this->TMPL =& $this->EE->TMPL;
     }
 
-    
+
     /* @danott ee-params
      * In pursuit of a one-size-fits all approach for setting EE Plugin parameters */
     foreach ($this->params as $param_array_key => &$param_array_value)
     {
-      
+
       /* Save the default value in a temporary variable.
        * We will revert to this value later if the parameter isn't set by other means. */
       $default = $param_array_value;
       $param_array_value = NULL;
 
-      
+
       /* First precedence -
        * Parameter set using the plugin parameters. */
       if ($this->TMPL->fetch_param($param_array_key))
@@ -99,11 +99,11 @@ class Loopee {
       }
 
       /* Second precedence -
-       * Parameter set using embed parameters. 
+       * Parameter set using embed parameters.
        * To set using embed parameters, a key must be set to TRUE in $this->set_from_embed['var'] = TRUE;
        * Also, it must not have been set in the plugin parameters.
        * If this is true, and the embed parameter exists, we'll set it. */
-      if (! isset($param_array_value) 
+      if (! isset($param_array_value)
          && isset($this->set_from_embed)
          && array_key_exists($param_array_key, $this->set_from_embed)
          && $this->set_from_embed[$param_array_key] === TRUE
@@ -112,7 +112,7 @@ class Loopee {
         $param_array_value = $TMPL->embed_vars["embed:" . $param_array_key];
       }
 
-    
+
       /* PLUMBING
        * Seperate parameter into an array using the pipe character. This way, you can pass
        * {exp:plugin vars="1|2|3|4"}
@@ -124,12 +124,12 @@ class Loopee {
       {
         // This lookbehind regex allows for escaping the pipe character \| in passed values
         $parts = preg_split("/(?<!\\\)\|/", $param_array_value, false, PREG_SPLIT_NO_EMPTY);
-        
+
         foreach ($parts as $parts_index => &$part )
         {
           // Unescape pipe characters in all the parts
           $part = str_replace('\\|', '|', $part);
-          
+
           /* COLONOSCOPY
            * In the "plumbing" stage we already split the value into an array.
            * This logic allows passing parameters in the form of:
@@ -138,22 +138,22 @@ class Loopee {
            * $params['vars'] = array('foo' => "bar", 'biz' => "baz")
            *
            * Try to seperate using the colon. On the other side of the colon is excrement. Poop joke. */
-          if (preg_match("/^([\w-]*):(.*)$/", $part, $excrement))
+          if (preg_match("/^([\w\s-]*):(.*)$/", $part, $excrement))
           {
             // Set the 'key' => 'value' pair. ($excrement[0] is the entire matched $part)
             $parts[$excrement[1]] = $excrement[2];
-            
+
             // The standard numbered index would still exist. It's not needed anymore.
-            unset($parts[$parts_index]);            
+            unset($parts[$parts_index]);
           }
         }
-        
+
         // The parsed value is no good to us if we don't actually save it. Save it!
         $param_array_value = $parts;
-          
+
       } // end if (isset($param_array_value))
-      
-      
+
+
       /* Let's consider the case where we used the tag {exp:plugin var="value"}
        * At this point in the process we would have: $params['var'] = array(0 => 'value');
        * There's a 99% chance that is not what we want. We'd rather have: $params['var'] = 'value'
@@ -162,10 +162,10 @@ class Loopee {
       {
         if ($param_array_key != 'foreach') // The one paramter we would like to keep as-is
         {
-          $param_array_value = $param_array_value[0];          
+          $param_array_value = $param_array_value[0];
         }
       }
-            
+
       /* If we get to this point, and nothing has been set,
        * we can revert to the default value */
       if (! isset($param_array_value))
@@ -185,12 +185,12 @@ class Loopee {
     /* TAG SETUP
      * Setup the custom defined "as" tags that are going to be replaced by either of the two loopee loops.
      */
-    
+
     // Assume the defaults, even if they do get reset, it's nice to be careful.
     $key_regex = '/{loopee_key}/';
     $value_regex = '/{loopee_value}/';
     $count_regex = '/{loopee_count}/';
-    
+
     /* If this is an array, the "as" parameter was a key:value pair.
      * Want to make sure we can replace both the key and the value appropriately */
     if (is_array($this->params['as']))
@@ -206,11 +206,11 @@ class Loopee {
     /* There is no key assocated, the user is only replacing with a single value. Simply use the value */
     else
     {
-      $value_regex = '/{('.$this->params['as'].')}/';      
+      $value_regex = '/{('.$this->params['as'].')}/';
     }
-    
+
     $count_regex = '/{('.$this->params['count'].')}/';
-    
+
 
     /* FOREACH
      * Do the foreach bit for every single value that was piped.
@@ -267,7 +267,7 @@ class Loopee {
     /* Provide the nice backspace parameter functionality of many looping built-in ee functions.
      * No matter which loop was in effect, though it will mostly only be used in forint */
     $this->return_data = substr($this->return_data, 0, strlen($this->return_data) - $this->params['backspace']);
-    
+
   } // end of Constructor function Loopee();
 
 } // end of Loopee class
